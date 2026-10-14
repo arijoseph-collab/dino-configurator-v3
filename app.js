@@ -346,7 +346,8 @@ keyLight.shadow.camera.left = -d;
 keyLight.shadow.camera.right = d;
 keyLight.shadow.camera.top = d;
 keyLight.shadow.camera.bottom = -d;
-keyLight.shadow.bias = -0.0004;
+keyLight.shadow.bias = -0.0001;
+keyLight.shadow.normalBias = 0.025;
 scene.add(keyLight);
 
 const fillLight = new THREE.DirectionalLight(0xeef4ff, 0.75);
