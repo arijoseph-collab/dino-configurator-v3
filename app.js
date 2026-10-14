@@ -1052,14 +1052,14 @@ function updateTelemetryAndSpecs() {
   const hMm = Math.round(size.y * scaleFactor);
 
   const volScale = Math.pow(state.printScaleMm / 100, 3);
-  const baseGrams = 34 + state.equipped.size * 2.5;
+  const baseGrams = 19 + state.equipped.size * 2.2;
   const estGrams = Math.round(baseGrams * volScale);
 
   document.getElementById('telemetrySummary').textContent = `${state.printScaleMm}MM • ~${estGrams}G PLA`;
   document.getElementById('specDims').textContent = `${wMm} × ${dMm} × ${hMm} mm`;
-  document.getElementById('specParts').textContent = `1 chassis + ${state.equipped.size} module${state.equipped.size === 1 ? '' : 's'}`;
+  document.getElementById('specParts').textContent = `1 hollow shell + ${state.equipped.size} module${state.equipped.size === 1 ? '' : 's'}`;
   document.getElementById('specTris').textContent = totalTris.toLocaleString();
-  document.getElementById('specWeight').textContent = `~${estGrams}g PLA (20% infill)`;
+  document.getElementById('specWeight').textContent = `~${estGrams}g PLA (3.0mm shell)`;
 
   const dlText = document.getElementById('downloadBtnText');
   if (state.printMode === 'merged') {
