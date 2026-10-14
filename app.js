@@ -17,12 +17,11 @@ const SOCKET_DEFS = {
   anchor_eyes_l: { slotId: 'eyes',  label: 'PORT 02L • L-EYE',  defaultPos: new THREE.Vector3( 0.275,  0.646,  0.404), normal: new THREE.Vector3( 1,  0,  0) },
   anchor_snout:  { slotId: 'snout', label: 'PORT 03 • SNOUT',   defaultPos: new THREE.Vector3( 0.000,  0.440,  0.750), normal: new THREE.Vector3( 0,  0,  1) },
   anchor_neck:   { slotId: 'neck',  label: 'PORT 04 • COLLAR',  defaultPos: new THREE.Vector3( 0.000,  0.145,  0.474), normal: new THREE.Vector3( 0,  0,  1) },
-  anchor_chest:  { slotId: 'neck',  label: 'PORT 05 • CHEST',   defaultPos: new THREE.Vector3( 0.000, -0.120,  0.524), normal: new THREE.Vector3( 0,  0,  1) },
-  anchor_back:   { slotId: 'back',  label: 'PORT 06 • DORSAL',  defaultPos: new THREE.Vector3( 0.000,  0.020, -0.090), normal: new THREE.Vector3( 0,  0, -1) },
-  anchor_hand_r: { slotId: 'hands', label: 'PORT 07 • R-WRIST', defaultPos: new THREE.Vector3(-0.539, -0.215,  0.270), normal: new THREE.Vector3(-1,  0,  0) },
-  anchor_hand_l: { slotId: 'hands', label: 'PORT 08 • L-WRIST', defaultPos: new THREE.Vector3( 0.535, -0.215,  0.270), normal: new THREE.Vector3( 1,  0,  0) },
-  anchor_tail:   { slotId: 'tail',  label: 'PORT 09 • TAIL',    defaultPos: new THREE.Vector3( 0.000, -0.221, -0.757), normal: new THREE.Vector3( 0,  0.52, -0.85).normalize() },
-  anchor_base:   { slotId: 'base',  label: 'PORT 10 • SOLES',   defaultPos: new THREE.Vector3( 0.000, -0.950,  0.240), normal: new THREE.Vector3( 0, -1,  0) },
+  anchor_back:   { slotId: 'back',  label: 'PORT 05 • DORSAL',  defaultPos: new THREE.Vector3( 0.000,  0.020, -0.090), normal: new THREE.Vector3( 0,  0, -1) },
+  anchor_hand_r: { slotId: 'hands', label: 'PORT 06 • R-WRIST', defaultPos: new THREE.Vector3(-0.539, -0.215,  0.270), normal: new THREE.Vector3(-1,  0,  0) },
+  anchor_hand_l: { slotId: 'hands', label: 'PORT 07 • L-WRIST', defaultPos: new THREE.Vector3( 0.535, -0.215,  0.270), normal: new THREE.Vector3( 1,  0,  0) },
+  anchor_tail:   { slotId: 'tail',  label: 'PORT 08 • TAIL',    defaultPos: new THREE.Vector3( 0.000, -0.221, -0.757), normal: new THREE.Vector3( 0,  0.52, -0.85).normalize() },
+  anchor_base:   { slotId: 'base',  label: 'PORT 09 • SOLES',   defaultPos: new THREE.Vector3( 0.000, -0.950,  0.240), normal: new THREE.Vector3( 0, -1,  0) },
 };
 
 const SLOTS = [
@@ -56,10 +55,10 @@ const SLOTS = [
   },
   {
     id: 'neck',
-    label: 'Neck & Fit',
+    label: 'Collar',
     anchorName: 'anchor_neck',
-    camOffset: new THREE.Vector3(0.8, 0.25, 2.55),
-    lookAt: new THREE.Vector3(0, -0.05, 0.2),
+    camOffset: new THREE.Vector3(0.8, 0.25, 2.45),
+    lookAt: new THREE.Vector3(0, 0.02, 0.25),
   },
   {
     id: 'back',
@@ -91,7 +90,7 @@ const SLOTS = [
   },
 ];
 
-// Each module maps to its Blender mesh name and the exact socket hole it notches into
+// Each module maps to its Blender mesh name and the exact tension-fit socket hole it pegs into
 const ACCESSORIES = [
   // 12 INDUSTRY-SPECIFIC 8-BIT VOXEL PROPS -> anchor_hand_r / anchor_hand_l
   { id: 'prop_healthcare',    slot: 'hands', group: 'hand_r', label: 'First-Aid Medkit',  badge: 'HEALTH • R', emoji: '🧰', anchor: 'anchor_hand_r' },
@@ -129,14 +128,11 @@ const ACCESSORIES = [
   { id: 'snout_fire',   slot: 'snout', group: 'snout', label: 'Arcade Fireball', emoji: '🔥', anchor: 'anchor_snout' },
   { id: 'snout_clown',  slot: 'snout', group: 'snout', label: 'Voxel Honk Nose', emoji: '🔴', anchor: 'anchor_snout' },
 
-  // NECK & TORSO FIT (8) -> anchor_neck / anchor_chest
-  { id: 'neck_suit',        slot: 'neck', group: 'torso',  label: 'Executive Suit & Tie', emoji: '🤵', anchor: 'anchor_chest' },
-  { id: 'neck_stethoscope', slot: 'neck', group: 'torso',  label: 'Clinical Stethoscope', emoji: '🩺', anchor: 'anchor_chest' },
-  { id: 'neck_vest',        slot: 'neck', group: 'torso',  label: 'Patagonia Fleece Vest',emoji: '🦺', anchor: 'anchor_chest' },
-  { id: 'neck_tshirt',      slot: 'neck', group: 'torso',  label: 'Black Tech Tee',       emoji: '👕', anchor: 'anchor_chest' },
-  { id: 'neck_overall',     slot: 'neck', group: 'torso',  label: 'Maker Overalls',       emoji: '🎽', anchor: 'anchor_chest' },
-  { id: 'neck_tie',         slot: 'neck', group: 'torso',  label: 'Exec Silk Tie',        emoji: '👔', anchor: 'anchor_neck' },
-  { id: 'neck_chain',       slot: 'neck', group: 'torso',  label: 'Gold Cuban Chain',     emoji: '⛓️', anchor: 'anchor_neck' },
+  // COLLAR / HALF-WRAP NECK ACCESSORIES (5) -> anchor_neck
+  { id: 'neck_tie',         slot: 'neck', group: 'collar', label: 'Exec Silk Tie',        emoji: '👔', anchor: 'anchor_neck' },
+  { id: 'neck_stethoscope', slot: 'neck', group: 'collar', label: 'Clinical Stethoscope', emoji: '🩺', anchor: 'anchor_neck' },
+  { id: 'neck_lanyard',     slot: 'neck', group: 'collar', label: 'Tech ID Lanyard',      emoji: '🪪', anchor: 'anchor_neck' },
+  { id: 'neck_chain',       slot: 'neck', group: 'collar', label: 'Gold Cuban Chain',     emoji: '⛓️', anchor: 'anchor_neck' },
   { id: 'neck_bowtie',      slot: 'neck', group: 'collar', label: '8-Bit Bowtie',         emoji: '🎀', anchor: 'anchor_neck' },
 
   // DORSAL / BACK (5) -> anchor_back
@@ -182,11 +178,11 @@ const FILAMENT_SWATCHES = [
   { name: 'Field Orange', hex: '#f26522' },
 ];
 
-// 11 Curated Industry Edition Presets
+// 11 Curated Industry Edition Presets (All peg-on & half-wrap modules, zero wraparound clothing)
 const OUTFIT_PRESETS = {
   tech: {
     label: 'Tech Bro Edition',
-    items: ['hat_headphones', 'eyes_round', 'neck_tshirt', 'prop_tech', 'prop_hospitality', 'base_sneakers'],
+    items: ['hat_headphones', 'eyes_round', 'neck_lanyard', 'prop_tech', 'prop_hospitality', 'base_sneakers'],
     finish: 'celadon',
   },
   healthcare: {
@@ -196,47 +192,47 @@ const OUTFIT_PRESETS = {
   },
   legal: {
     label: 'Legal Edition',
-    items: ['neck_suit', 'prop_legal'],
+    items: ['neck_tie', 'prop_legal'],
     finish: 'chrome',
   },
   finance: {
     label: 'Finance Bro Edition',
-    items: ['neck_vest'],
+    items: ['eyes_pixel', 'neck_tie', 'prop_finance'],
     finish: 'celadon',
   },
   creative: {
     label: 'Creative Studio Edition',
-    items: ['hat_cap', 'eyes_round', 'snout_stache', 'neck_overall', 'back_wings', 'prop_creative', 'prop_hospitality', 'base_skateboard'],
+    items: ['hat_cap', 'eyes_round', 'snout_stache', 'neck_bowtie', 'back_wings', 'prop_creative', 'base_skateboard'],
     finish: 'bone',
   },
   retail: {
     label: 'Retail Boutique Edition',
-    items: ['hat_crown', 'eyes_pixel', 'neck_chain', 'back_cape', 'prop_retail', 'prop_hospitality', 'tail_bow', 'base_sneakers'],
+    items: ['hat_crown', 'eyes_pixel', 'neck_chain', 'back_cape', 'prop_retail', 'tail_bow', 'base_sneakers'],
     finish: 'celadon',
   },
   research: {
     label: 'Research Lab Edition',
-    items: ['eyes_vr', 'snout_pipe', 'neck_bowtie', 'back_jetpack', 'prop_research', 'prop_tech', 'tail_spikes', 'base_desert'],
+    items: ['eyes_vr', 'snout_pipe', 'neck_lanyard', 'back_jetpack', 'prop_research', 'tail_spikes', 'base_desert'],
     finish: 'bone',
   },
   hospitality: {
     label: 'Hospitality & Food Edition',
-    items: ['hat_chef', 'snout_stache', 'neck_bowtie', 'back_windup', 'prop_hospitality', 'prop_retail', 'tail_bow', 'base_boots'],
+    items: ['hat_chef', 'snout_stache', 'neck_bowtie', 'back_windup', 'prop_hospitality', 'tail_bow', 'base_boots'],
     finish: 'terracotta',
   },
   travel: {
     label: 'Travel & Aviation Edition',
-    items: ['hat_cowboy', 'eyes_pixel', 'neck_chain', 'back_backpack', 'prop_travel', 'prop_cactus', 'tail_spikes', 'base_desert'],
+    items: ['hat_cowboy', 'eyes_pixel', 'neck_chain', 'back_backpack', 'prop_travel', 'tail_spikes', 'base_desert'],
     finish: 'celadon',
   },
   manufacturing: {
     label: 'Manufacturing Edition',
-    items: ['hat_hardhat', 'eyes_vr', 'neck_overall', 'back_windup', 'prop_manufacturing', 'prop_tech', 'tail_spikes', 'base_boots'],
+    items: ['hat_hardhat', 'eyes_vr', 'neck_lanyard', 'back_windup', 'prop_manufacturing', 'tail_spikes', 'base_boots'],
     finish: 'cyber',
   },
   industrial: {
     label: 'Industrial Field Edition',
-    items: ['hat_hardhat', 'eyes_pixel', 'snout_pipe', 'neck_overall', 'back_backpack', 'prop_industrial', 'prop_finance', 'base_boots'],
+    items: ['hat_hardhat', 'eyes_pixel', 'snout_pipe', 'back_backpack', 'prop_industrial', 'base_boots'],
     finish: 'orange',
   },
 };
@@ -550,11 +546,7 @@ function toggleAccessory(accId, forceState = null, silent = false) {
     ACCESSORIES.forEach((other) => {
       if (other.id === accId || !state.equipped.has(other.id)) return;
       const sameGroup = other.slot === meta.slot && other.group === meta.group;
-      // Also prevent neck_tie / neck_chain from overlapping with neck_bowtie if they share anchor_neck
-      const neckConflict = meta.slot === 'neck' && other.slot === 'neck' &&
-        !(meta.id === 'neck_bowtie' && other.id === 'neck_overall') &&
-        !(meta.id === 'neck_overall' && other.id === 'neck_bowtie');
-      if (sameGroup || neckConflict) {
+      if (sameGroup) {
         state.equipped.delete(other.id);
         if (accessoryMeshes[other.id]) {
           accessoryMeshes[other.id].visible = false;
@@ -566,7 +558,7 @@ function toggleAccessory(accId, forceState = null, silent = false) {
     state.lastInteractedItem = accId;
     obj.visible = true;
 
-    // Coaxial insertion animation: slides the module's notched peg straight into the socket hole!
+    // Coaxial insertion animation: slides the module's tension-fit peg straight into the socket hole!
     const normal = getAccessorySlideVector(meta);
     const targetOffset = state.explodePegs ? 0.22 : 0.0;
     const startOffset = targetOffset + 0.26;
@@ -608,13 +600,13 @@ function toggleAccessory(accId, forceState = null, silent = false) {
 function updateGroundPlaneHeight() {
   let lowestY = -0.955;
   if (state.explodePegs && (state.equipped.has('base_desert') || state.equipped.has('base_skateboard') || state.equipped.has('base_sneakers') || state.equipped.has('base_boots'))) {
-    lowestY = -1.28;
+    lowestY = -1.36;
   } else if (state.equipped.has('base_desert')) {
     lowestY = -1.055;
   } else if (state.equipped.has('base_skateboard')) {
-    lowestY = -1.105;
+    lowestY = -1.118;
   } else if (state.equipped.has('base_sneakers') || state.equipped.has('base_boots')) {
-    lowestY = -1.045;
+    lowestY = -1.158;
   }
   shadowPlane.position.y = lowestY;
   buildPlateGroup.position.y = lowestY;
