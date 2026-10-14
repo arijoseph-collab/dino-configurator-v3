@@ -385,7 +385,7 @@ scene.add(buildPlateGroup);
   plateMesh.receiveShadow = true;
   buildPlateGroup.add(plateMesh);
 
-  const grid = new THREE.GridHelper(3.6, 18, 0xea580c, 0x3b404c);
+  const grid = new THREE.GridHelper(3.6, 18, 0x3b6bff, 0x3b404c);
   grid.position.y = 0.002;
   buildPlateGroup.add(grid);
 }
@@ -423,7 +423,7 @@ scene.add(dinoRootGroup);
 function spawnSnapRipple(pos, normal) {
   const ringGeo = new THREE.RingGeometry(0.042, 0.068, 32);
   const ringMat = new THREE.MeshBasicMaterial({
-    color: 0xea580c,
+    color: 0x3b6bff,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.9,
@@ -655,11 +655,11 @@ function rebuildExplodeGuideLines() {
   if (!state.explodePegs) return;
 
   const lineMat = new THREE.LineDashedMaterial({
-    color: 0xea580c,
+    color: 0x3b6bff,
     dashSize: 0.025,
     gapSize: 0.018,
     transparent: true,
-    opacity: 0.82,
+    opacity: 0.85,
   });
 
   state.equipped.forEach((accId) => {
@@ -1262,9 +1262,10 @@ document.getElementById('btnToggleAnchors').addEventListener('click', (e) => {
 document.getElementById('btnTogglePegs').addEventListener('click', (e) => {
   state.explodePegs = !state.explodePegs;
   e.currentTarget.classList.toggle('active', state.explodePegs);
+  document.getElementById('viewportContainer').classList.toggle('xray-grid', state.explodePegs);
   syncAllAccessoryTransforms();
   sfx.playSnap(state.explodePegs);
-  showToast(state.explodePegs ? 'EXPLODED DIAGRAM: COAXIAL NOTCHED PEGS & SOCKET PORTS' : 'MODULES LOCKED FLUSH INTO CHASSIS PORTS');
+  showToast(state.explodePegs ? 'X-RAY EXPLODED VIEW: COAXIAL TENSION PEGS & PORTS' : 'MODULES LOCKED FLUSH INTO CHASSIS PORTS');
 });
 
 document.getElementById('btnRandomize').addEventListener('click', () => {
@@ -1272,7 +1273,7 @@ document.getElementById('btnRandomize').addEventListener('click', () => {
   Object.values(accessoryMeshes).forEach((m) => (m.visible = false));
 
   const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  const groupsToPick = ['hat', 'eyes', 'snout', 'torso', 'back', 'hand_r', 'hand_l', 'tail', 'base'];
+  const groupsToPick = ['hat', 'eyes', 'snout', 'collar', 'back', 'hand_r', 'hand_l', 'tail', 'base'];
   groupsToPick.forEach((grp, idx) => {
     if (Math.random() < 0.85 || grp === 'hand_r' || grp === 'hand_l') {
       const candidates = ACCESSORIES.filter((a) => a.group === grp);
