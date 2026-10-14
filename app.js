@@ -13,7 +13,8 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const SOCKET_DEFS = {
   anchor_head:   { slotId: 'head',  label: 'PORT 01 • CROWN',   defaultPos: new THREE.Vector3( 0.000,  0.946,  0.385), normal: new THREE.Vector3( 0,  1,  0) },
-  anchor_eyes:   { slotId: 'eyes',  label: 'PORT 02 • BROW',    defaultPos: new THREE.Vector3( 0.000,  0.680,  0.776), normal: new THREE.Vector3( 0,  0,  1) },
+  anchor_eyes_r: { slotId: 'eyes',  label: 'PORT 02R • R-EYE',  defaultPos: new THREE.Vector3(-0.275,  0.646,  0.404), normal: new THREE.Vector3(-1,  0,  0) },
+  anchor_eyes_l: { slotId: 'eyes',  label: 'PORT 02L • L-EYE',  defaultPos: new THREE.Vector3( 0.275,  0.646,  0.404), normal: new THREE.Vector3( 1,  0,  0) },
   anchor_snout:  { slotId: 'snout', label: 'PORT 03 • SNOUT',   defaultPos: new THREE.Vector3( 0.000,  0.440,  0.750), normal: new THREE.Vector3( 0,  0,  1) },
   anchor_neck:   { slotId: 'neck',  label: 'PORT 04 • COLLAR',  defaultPos: new THREE.Vector3( 0.000,  0.145,  0.474), normal: new THREE.Vector3( 0,  0,  1) },
   anchor_chest:  { slotId: 'neck',  label: 'PORT 05 • CHEST',   defaultPos: new THREE.Vector3( 0.000, -0.120,  0.524), normal: new THREE.Vector3( 0,  0,  1) },
@@ -42,9 +43,9 @@ const SLOTS = [
   {
     id: 'eyes',
     label: 'Optics',
-    anchorName: 'anchor_eyes',
-    camOffset: new THREE.Vector3(0.85, 0.72, 2.15),
-    lookAt: new THREE.Vector3(0, 0.62, 0.35),
+    anchorName: 'anchor_eyes_l',
+    camOffset: new THREE.Vector3(1.15, 0.72, 2.05),
+    lookAt: new THREE.Vector3(0, 0.64, 0.38),
   },
   {
     id: 'snout',
@@ -93,8 +94,8 @@ const SLOTS = [
 // Each module maps to its Blender mesh name and the exact socket hole it notches into
 const ACCESSORIES = [
   // 12 INDUSTRY-SPECIFIC 8-BIT VOXEL PROPS -> anchor_hand_r / anchor_hand_l
-  { id: 'prop_healthcare',    slot: 'hands', group: 'hand_r', label: 'First-Aid Medkit',  badge: 'HEALTH • R', emoji: '🩺', anchor: 'anchor_hand_r' },
-  { id: 'prop_legal',         slot: 'hands', group: 'hand_r', label: 'Judge Voxel Gavel', badge: 'LEGAL • R',  emoji: '⚖️', anchor: 'anchor_hand_r' },
+  { id: 'prop_healthcare',    slot: 'hands', group: 'hand_r', label: 'First-Aid Medkit',  badge: 'HEALTH • R', emoji: '🧰', anchor: 'anchor_hand_r' },
+  { id: 'prop_legal',         slot: 'hands', group: 'hand_r', label: 'Yellow Legal Pad',  badge: 'LEGAL • R',  emoji: '📝', anchor: 'anchor_hand_r' },
   { id: 'prop_research',      slot: 'hands', group: 'hand_r', label: 'Erlenmeyer Flask',  badge: 'LAB • R',    emoji: '🧪', anchor: 'anchor_hand_r' },
   { id: 'prop_hospitality',   slot: 'hands', group: 'hand_r', label: 'Barista Steam Mug', badge: 'FOOD • R',   emoji: '☕', anchor: 'anchor_hand_r' },
   { id: 'prop_manufacturing', slot: 'hands', group: 'hand_r', label: 'Machined Gear Cog', badge: 'MFG • R',    emoji: '⚙️', anchor: 'anchor_hand_r' },
@@ -116,11 +117,11 @@ const ACCESSORIES = [
   { id: 'hat_chef',       slot: 'head', group: 'hat', label: 'Culinary Toque',    emoji: '👨‍🍳', anchor: 'anchor_head' },
   { id: 'hat_horns',      slot: 'head', group: 'hat', label: 'Viking Crest',      emoji: '🦕', anchor: 'anchor_head' },
 
-  // OPTICS / SIDE-EYE EYEWEAR (4) -> anchor_eyes (frames the blocky side eyes!)
-  { id: 'eyes_pixel',   slot: 'eyes', group: 'eyes', label: '8-Bit Deal Shades', emoji: '🕶️', anchor: 'anchor_eyes' },
-  { id: 'eyes_round',   slot: 'eyes', group: 'eyes', label: 'Architect Rounds',  emoji: '👓', anchor: 'anchor_eyes' },
-  { id: 'eyes_vr',      slot: 'eyes', group: 'eyes', label: 'TE Synth Visor',    emoji: '🥽', anchor: 'anchor_eyes' },
-  { id: 'eyes_monocle', slot: 'eyes', group: 'eyes', label: 'Gold Monocle',      emoji: '🧐', anchor: 'anchor_eyes' },
+  // OPTICS / SIDE-EYE EYEWEAR (4) -> anchor_eyes_l & anchor_eyes_r (side-of-head peg holes!)
+  { id: 'eyes_pixel',   slot: 'eyes', group: 'eyes', label: '8-Bit Deal Shades', emoji: '🕶️', anchor: 'anchor_eyes_l' },
+  { id: 'eyes_round',   slot: 'eyes', group: 'eyes', label: 'Architect Rounds',  emoji: '👓', anchor: 'anchor_eyes_l' },
+  { id: 'eyes_vr',      slot: 'eyes', group: 'eyes', label: 'TE Synth Visor',    emoji: '🥽', anchor: 'anchor_eyes_l' },
+  { id: 'eyes_monocle', slot: 'eyes', group: 'eyes', label: 'Gold Monocle',      emoji: '🧐', anchor: 'anchor_eyes_l' },
 
   // SNOUT / MOUTH (4) -> anchor_snout
   { id: 'snout_stache', slot: 'snout', group: 'snout', label: '8-Bit Handlebar', emoji: '🥸', anchor: 'anchor_snout' },
@@ -128,13 +129,15 @@ const ACCESSORIES = [
   { id: 'snout_fire',   slot: 'snout', group: 'snout', label: 'Arcade Fireball', emoji: '🔥', anchor: 'anchor_snout' },
   { id: 'snout_clown',  slot: 'snout', group: 'snout', label: 'Voxel Honk Nose', emoji: '🔴', anchor: 'anchor_snout' },
 
-  // NECK & TORSO FIT (6) -> anchor_neck / anchor_chest
-  { id: 'neck_tshirt',  slot: 'neck', group: 'torso',  label: 'Black Tech Tee',      emoji: '👕', anchor: 'anchor_chest' },
-  { id: 'neck_vest',    slot: 'neck', group: 'torso',  label: 'Midtown Fleece Vest', emoji: '🦺', anchor: 'anchor_chest' },
-  { id: 'neck_overall', slot: 'neck', group: 'torso',  label: 'Maker Overalls',      emoji: '🎽', anchor: 'anchor_chest' },
-  { id: 'neck_tie',     slot: 'neck', group: 'torso',  label: 'Exec Silk Tie',       emoji: '👔', anchor: 'anchor_neck' },
-  { id: 'neck_chain',   slot: 'neck', group: 'torso',  label: 'Gold Cuban Chain',    emoji: '⛓️', anchor: 'anchor_neck' },
-  { id: 'neck_bowtie',  slot: 'neck', group: 'collar', label: '8-Bit Bowtie',        emoji: '🎀', anchor: 'anchor_neck' },
+  // NECK & TORSO FIT (8) -> anchor_neck / anchor_chest
+  { id: 'neck_suit',        slot: 'neck', group: 'torso',  label: 'Executive Suit & Tie', emoji: '🤵', anchor: 'anchor_chest' },
+  { id: 'neck_stethoscope', slot: 'neck', group: 'torso',  label: 'Clinical Stethoscope', emoji: '🩺', anchor: 'anchor_chest' },
+  { id: 'neck_vest',        slot: 'neck', group: 'torso',  label: 'Patagonia Fleece Vest',emoji: '🦺', anchor: 'anchor_chest' },
+  { id: 'neck_tshirt',      slot: 'neck', group: 'torso',  label: 'Black Tech Tee',       emoji: '👕', anchor: 'anchor_chest' },
+  { id: 'neck_overall',     slot: 'neck', group: 'torso',  label: 'Maker Overalls',       emoji: '🎽', anchor: 'anchor_chest' },
+  { id: 'neck_tie',         slot: 'neck', group: 'torso',  label: 'Exec Silk Tie',        emoji: '👔', anchor: 'anchor_neck' },
+  { id: 'neck_chain',       slot: 'neck', group: 'torso',  label: 'Gold Cuban Chain',     emoji: '⛓️', anchor: 'anchor_neck' },
+  { id: 'neck_bowtie',      slot: 'neck', group: 'collar', label: '8-Bit Bowtie',         emoji: '🎀', anchor: 'anchor_neck' },
 
   // DORSAL / BACK (5) -> anchor_back
   { id: 'back_windup',   slot: 'back', group: 'back', label: 'Brass Wind-Up Key', emoji: '🗝️', anchor: 'anchor_back' },
@@ -188,17 +191,17 @@ const OUTFIT_PRESETS = {
   },
   healthcare: {
     label: 'Healthcare Edition',
-    items: ['eyes_round', 'neck_bowtie', 'back_windup', 'prop_healthcare', 'prop_tech', 'base_sneakers'],
+    items: ['neck_stethoscope', 'prop_healthcare'],
     finish: 'bone',
   },
   legal: {
     label: 'Legal Edition',
-    items: ['hat_tophat', 'eyes_monocle', 'snout_stache', 'neck_tie', 'back_windup', 'prop_legal', 'prop_finance', 'base_boots'],
+    items: ['neck_suit', 'prop_legal'],
     finish: 'chrome',
   },
   finance: {
     label: 'Finance Bro Edition',
-    items: ['eyes_pixel', 'neck_vest', 'prop_finance', 'prop_hospitality', 'base_boots'],
+    items: ['neck_vest'],
     finish: 'celadon',
   },
   creative: {
@@ -528,6 +531,9 @@ loader.load(
 // ============================================================================
 
 function getAccessorySlideVector(meta) {
+  if (meta.slot === 'eyes' && meta.id !== 'eyes_monocle') {
+    return new THREE.Vector3(0, 0, 1);
+  }
   const anchorInfo = anchorNodes[meta.anchor];
   return anchorInfo ? anchorInfo.normal.clone() : new THREE.Vector3(0, 1, 0);
 }
@@ -583,6 +589,9 @@ function toggleAccessory(accId, forceState = null, silent = false) {
     const anchorInfo = anchorNodes[meta.anchor];
     if (anchorInfo && !silent) {
       spawnSnapRipple(anchorInfo.pos, anchorInfo.normal);
+      if (meta.slot === 'eyes' && meta.id !== 'eyes_monocle' && anchorNodes.anchor_eyes_r) {
+        spawnSnapRipple(anchorNodes.anchor_eyes_r.pos, anchorNodes.anchor_eyes_r.normal);
+      }
       sfx.playSnap(true);
     }
   } else {
@@ -664,12 +673,22 @@ function rebuildExplodeGuideLines() {
     const meta = ACCESSORIES.find((a) => a.id === accId);
     const anchorInfo = meta ? anchorNodes[meta.anchor] : null;
     if (!anchorInfo) return;
+    const slideVec = getAccessorySlideVector(meta);
     const p0 = anchorInfo.pos.clone();
-    const p1 = p0.clone().addScaledVector(anchorInfo.normal, 0.22);
+    const p1 = p0.clone().addScaledVector(slideVec, 0.22);
     const geo = new THREE.BufferGeometry().setFromPoints([p0, p1]);
     const line = new THREE.Line(geo, lineMat);
     line.computeLineDistances();
     guideLinesGroup.add(line);
+
+    if (meta.slot === 'eyes' && meta.id !== 'eyes_monocle' && anchorNodes.anchor_eyes_r) {
+      const p0r = anchorNodes.anchor_eyes_r.pos.clone();
+      const p1r = p0r.clone().addScaledVector(slideVec, 0.22);
+      const geor = new THREE.BufferGeometry().setFromPoints([p0r, p1r]);
+      const liner = new THREE.Line(geor, lineMat);
+      liner.computeLineDistances();
+      guideLinesGroup.add(liner);
+    }
   });
 }
 
@@ -829,7 +848,12 @@ function updateAnchorPinsProjection() {
     pin.style.left = `${x}px`;
     pin.style.top = `${y}px`;
 
-    const hasEquipped = ACCESSORIES.some((a) => a.anchor === anchorName && state.equipped.has(a.id));
+    const hasEquipped = ACCESSORIES.some((a) => {
+      if (!state.equipped.has(a.id)) return false;
+      if (a.anchor === anchorName) return true;
+      if (anchorName === 'anchor_eyes_r' && a.slot === 'eyes' && a.id !== 'eyes_monocle') return true;
+      return false;
+    });
     pin.classList.toggle('equipped', hasEquipped);
     pin.classList.toggle('active', state.activeSlot === info.slotId);
   });
@@ -943,28 +967,38 @@ function renderAccessoryStrip() {
 
 function checkDragProximity(clientX, clientY) {
   if (!dragState) return;
-  const targetAnchor = anchorNodes[dragState.anchorName];
-  if (!targetAnchor) return;
+  const candidateNames =
+    dragState.anchorName === 'anchor_eyes_l'
+      ? ['anchor_eyes_l', 'anchor_eyes_r']
+      : [dragState.anchorName];
 
-  const worldPos = targetAnchor.pos.clone().project(camera);
-  const sx = (worldPos.x * 0.5 + 0.5) * window.innerWidth;
-  const sy = (-worldPos.y * 0.5 + 0.5) * window.innerHeight;
-  const dist = Math.hypot(clientX - sx, clientY - sy);
-
-  const isNear = dist < 135;
-  dragState.matched = isNear;
-  if (targetAnchor.pinEl) {
-    targetAnchor.pinEl.classList.toggle('drop-target', isNear);
-  }
+  let anyNear = false;
+  candidateNames.forEach((name) => {
+    const targetAnchor = anchorNodes[name];
+    if (!targetAnchor) return;
+    const worldPos = targetAnchor.pos.clone().project(camera);
+    const sx = (worldPos.x * 0.5 + 0.5) * window.innerWidth;
+    const sy = (-worldPos.y * 0.5 + 0.5) * window.innerHeight;
+    const dist = Math.hypot(clientX - sx, clientY - sy);
+    const isNear = dist < 135;
+    if (isNear) anyNear = true;
+    if (targetAnchor.pinEl) {
+      targetAnchor.pinEl.classList.toggle('drop-target', isNear);
+    }
+  });
+  dragState.matched = anyNear;
 }
 
 function finishDragDrop() {
   if (!dragState) return;
-  const targetAnchor = anchorNodes[dragState.anchorName];
-  if (targetAnchor?.pinEl) {
-    targetAnchor.pinEl.classList.remove('drop-target');
-  }
+  ['anchor_eyes_l', 'anchor_eyes_r', dragState.anchorName].forEach((name) => {
+    const targetAnchor = anchorNodes[name];
+    if (targetAnchor?.pinEl) {
+      targetAnchor.pinEl.classList.remove('drop-target');
+    }
+  });
   if (dragState.matched) {
+    const targetAnchor = anchorNodes[dragState.anchorName];
     toggleAccessory(dragState.accId, true);
     showToast(`SNAPPED ${dragState.label.toUpperCase()} → ${targetAnchor?.label || 'PORT'}`);
   }
